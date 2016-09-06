@@ -23,7 +23,7 @@ var config = {
 			return util.readFileAsync(wechat_ticket_file)
 		},
 		saveTicket: function(data){
-			data = JSON.stringify(data);
+			data = JSON.stringify(data);   
 			return util.writeFileAsync(wechat_ticket_file,data)
 		}
 	}
