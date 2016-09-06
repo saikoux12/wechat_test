@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+		<div style="width:100px;height:100px;background-color:red"></div>
+		<h3>点击红框并说出电影名字，再次点击结束</h3>
+		<p id="title"></p>
+		<div id="director"></div>
+		<div id="year"></div>
+		<div id="poster"></div>
+
+	<script src="http://zeptojs.com/zepto-docs.min.js"></script>
+	<script>
+		$(function(){
+			$.ajax({
+				type: 'get',
+				url: 'https://api.douban.com/v2/movie/search?q=' + '指环王',
+				dataType: 'jsonp',
+				jsonp: 'callback',
+				success: function(data){
+					if(data.subjects.length > 1){
+						var subject = data.subjects[0];
+						$('#title').html(subject.title);
+						$('#year').html(subject.year);
+						$('#director').html(subject.directors.name);
+						$('#poster').html('<img src="' + subject.images.large + '" />');
+					}else{
+						alert('err');
+					}
+
+				}
+			})
+		})
+
+
+	</script>
+</body>
+</html>
