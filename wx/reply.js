@@ -11,7 +11,7 @@ var path = require('path');
 // .then(function(msg){
 // 	console.log(msg);
 // })
-exports.reply = function* (next){
+exports.reply = function* (next){   
 	var message = this.weixin;
 	console.log('message-----------------');
 	console.log(message);
