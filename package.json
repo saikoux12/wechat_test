@@ -1,0 +1,47 @@
+{
+  "name": "wechat_test",
+  "version": "1.0.0",
+  "description": "wechat",
+  "main": "app.js",
+  "dependencies": {
+    "bcryptjs": "^2.3.0",
+    "bluebird": "^3.4.6",
+    "cheerio": "^0.22.0",
+    "crypto": "^0.0.3",
+    "ejs": "^2.5.2",
+    "fs": "0.0.1-security",
+    "grunt": "^1.0.1",
+    "grunt-concurrent": "^2.3.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-nodemon": "^0.4.2",
+    "heredoc": "^1.3.1",
+    "jade": "^1.11.0",
+    "jssha": "^2.2.0",
+    "koa": "^1.2.4",
+    "koa-request": "^1.0.0",
+    "koa-router": "^5.4.0",
+    "koa-views": "^4.0.0",
+    "lodash": "^4.16.1",
+    "mkdirp": "^0.5.1",
+    "mongoose": "^4.6.1",
+    "promise": "^7.1.1",
+    "raw-body": "^2.1.7",
+    "request": "^2.75.0",
+    "sha1": "^1.1.1",
+    "xml2js": "^0.4.17"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saikoux12/wechat_test.git"
+  },
+  "author": "wzx",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saikoux12/wechat_test/issues"
+  },
+  "homepage": "https://github.com/saikoux12/wechat_test#readme"
+}
