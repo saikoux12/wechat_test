@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var request = Promise.promisify(require('request'));
 var koa_request = require('koa-request');
 var _lodash = require('lodash');
+var co = require('co');
 
 //index page
 exports.findAll = function *(){
@@ -70,6 +71,10 @@ function updateMovies(movie){
 					}
 				})
 			})
+
+			co(function *(){
+				yield cateArray;
+			})
 		}else{
 			movie.save();
 		}
@@ -111,11 +116,11 @@ exports.searchByDouban = function *(q){
 				}
 			})
 		})
+
+		yield queryArray
 		movies.forEach(function(movie){
 			 updateMovies(movie);
 		})
-
-		yield queryArray
 	}
 
 	return movies;

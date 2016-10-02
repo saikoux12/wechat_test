@@ -47,18 +47,24 @@ wechatApi.deleteMenu().then(function(){
 var app = new Koa()
 var Router = require('koa-router');
 var router = new Router();
-var game = require('./app/controllers/game');
-var wechat = require('./app/controllers/wechat');
-
+var session = require('koa-session');
+var User = mongoose.model('User');
 var views = require('koa-views');
 app.use(views(__dirname + '/app/views', {
   extension: 'jade' 
 }))
-
-router.get('/movie',game.guess);
-router.get('/movie/:id',game.find);
-router.get('/wx',wechat.hear);
-router.post('/wx',wechat.hear);
+app.keys = ['key'];
+app.use(session(app));
+app.use(function *(next){
+	var user = this.session;
+	if(user && user._id){
+		this.session.user = yield User.findOne({_id: user._id}).exec();
+		this.state.user = this.session.user;
+	}else{
+		this.state.user = null;
+	}
+	yield next;
+})
 app
  .use(router.routes())
  .use(router.allowedMethods());

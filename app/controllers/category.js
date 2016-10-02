@@ -1,10 +1,11 @@
+'use strict'
 var Category = require('../models/category');
-// exports.update = function(req,res){
+// exports.update = function *(next){
 //     var id = req.params.id;
 //     console.log(id);
 //     if(id){
 //         Movie.findById(id, function(err,movie){
-//             res.render('admin',{
+//             yield this.render('pages/admin',{
 //                 title: '更新页',
 //                 movie: movie
 //             })
@@ -13,8 +14,8 @@ var Category = require('../models/category');
 //     }
 // }
 
-exports.new = function(req,res){
-    res.render('category_admin',{
+exports.new = function *(next){
+    yield this.render('pages/category_admin',{
         title: '后台 分类录入页' ,
         category: {
             name: ''
@@ -22,41 +23,29 @@ exports.new = function(req,res){
     })
 }
 
-exports.save = function(req,res){
-    var _category = req.body.category;
-    console.log(req.body.category);
+exports.save = function *(next){
+    var _category = this.request.body.category;
     var category = new Category(_category)
-    category.save(function(err,category){
-        if(err){
-            console.log(err);
-        }
-        res.redirect('/admin/category/list');
-    })
-    
+    yield category.save();
+    this.redirect('/admin/category/list');  
 }
 
-exports.list = function(req,res){
-    Category.fetch(function(err,categories){
-        if(err){
-            console.log(err);
-        }
-       res.render('category_list',{
-            title: '电影分类列表',
-             categories: categories
+exports.list = function *(next){
+    var categories = yield Category.find({});
+   yield this.render('pages/category_list',{
+        title: '电影分类列表',
+         categories: categories
+    });    
+}
+
+exports.update = function *(next){
+    var id = this.params.id;
+    var category = yield Category.findOne({_id: id}).exec();
+    if(id){
+        yield this.render('pages/category_admin',{
+            title: '分类更新页',
+            category: category
         })
-    })
-    
-}
+    }
 
-exports.update = function(req,res){
-    var id = req.params.id;
-    console.log(id);
-    Category.findById(id,function(err, category){
-        if(id){
-            res.render('category_admin',{
-                title: '分类更新页',
-                category: category
-            })
-        }
-    })
 }

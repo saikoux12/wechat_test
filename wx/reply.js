@@ -106,7 +106,7 @@ exports.reply = function* (next){
 		 				title: movie.title,
 		 				description: movie.title,
 		 				picUrl: movie.poster,
-		 				url: 'http://wzzzzx.ngrok.cc/movie/' + movie._id
+		 				url: 'http://wzzzzx.ngrok.cc/wechat/movie/' + movie._id
 		 			})
 		 		})
 		 	}else{
