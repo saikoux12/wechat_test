@@ -48,6 +48,7 @@ var app = new Koa()
 var Router = require('koa-router');
 var router = new Router();
 var session = require('koa-session');
+var bodyParser = require('koa-bodyparser');
 var User = mongoose.model('User');
 var views = require('koa-views');
 app.use(views(__dirname + '/app/views', {
@@ -55,8 +56,9 @@ app.use(views(__dirname + '/app/views', {
 }))
 app.keys = ['key'];
 app.use(session(app));
+app.use(bodyParser());
 app.use(function *(next){
-	var user = this.session;
+	var user = this.session.user;
 	if(user && user._id){
 		this.session.user = yield User.findOne({_id: user._id}).exec();
 		this.state.user = this.session.user;
@@ -65,6 +67,7 @@ app.use(function *(next){
 	}
 	yield next;
 })
+require('./config/routes')(router);
 app
  .use(router.routes())
  .use(router.allowedMethods());

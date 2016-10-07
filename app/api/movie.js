@@ -4,17 +4,21 @@ var Category = require('../models/category')
 var Promise = require('bluebird');
 var request = Promise.promisify(require('request'));
 var koa_request = require('koa-request');
-var _lodash = require('lodash');
+var _ = require('lodash');
 var co = require('co');
 
 //index page
 exports.findAll = function *(){
-	var categories = yield  Category
-        .find({})
-        .populate({path: 'movies', options: {limit: 5}})
-        .exec();
+  var categories = yield Category
+    .find({})
+    .populate({
+      path: 'movies',
+      select: 'title poster',
+      options: { limit: 6 }
+    })
+    .exec()
 
-    return categories;
+  return categories
 }
 
 exports.searchByCategory = function *(catId){
@@ -47,8 +51,8 @@ function updateMovies(movie){
 		var data = response.body;
 		_.extend(movie,{
 			country: data.countries[0],
-			language: data.language,
-			summary: data.summary
+		    language: data.language,
+		    summary: data.summary
 		})
 
 		var genres = movie.genres;
@@ -60,6 +64,7 @@ function updateMovies(movie){
 
 					if(cat){
 						cat.movies.push(movie._id);
+						yield cat.save()
 					}else{
 						cat = new Category({
 							name: genre,

@@ -1,9 +1,9 @@
 'use strict'
 var Comment = require('../models/comment');
-var _ = require('underscore');
 
 exports.save = function *(next){
     var _comment = this.request.body.comment;
+    console.log(this.request)
     var movieId = _comment.movie;
     if(_comment.cid){
     	var comment = yield Comment.findOne({_id: _comment.cid}).exec();
@@ -14,11 +14,15 @@ exports.save = function *(next){
 		}
 		comment.reply.push(reply);
 		yield comment.save();
-		this.redirect('/movie/' + movieId );
+		this.body = {success: 1};
     }else{
-	    var comment = new Comment(_comment);
+	    var comment = new Comment({
+	    		movie: _comment.movie,
+	    		from: _comment.from,
+	    		content: _comment.content,
+	    	});
 	    yield comment.save();
-	    this.redirect('/movie/' + movieId );
+	    this.body = {success: 1};
     }
 
 }

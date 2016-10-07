@@ -7,6 +7,7 @@ var UserSchema = new mongoose.Schema({
 		unique: true,
 		type: String
 	},
+	openid: String,
 	password: String,
 	// 0: normal user
 	role: {
@@ -50,8 +51,7 @@ UserSchema.pre('save',function(next){
 })
 
 UserSchema.methods = {
-	comparePassword: function(_password){
-		var password = this.password;
+	comparePassword: function(_password,password){
 		return function(cb){
 			bcrypt.compare(_password,password,function(err,isMatch){
 				cb(err,isMatch);

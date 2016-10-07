@@ -14,32 +14,33 @@ exports.showSignin = function *(next){
 }
 
 exports.signup = function *(next){
-    var _user = this.request.user;
+    var _user = this.request.body.user;
     var user = yield User.findOne({name:_user.name}).exec();
     if(user){
         this.redirect('pages/signin');
     }else{
         user = new User(_user);
         yield user.save()
-        this.redirect('pages/');
+        this.session.user = user;
+        this.redirect('/');
     }
 }
     //signin
 exports.signin =  function *(next){
-    var _user = this.request.user;
+    var _user = this.request.body.user;
     var name = _user.name;
     var password = _user.password;
-    var user = User.findOne({name: name}).exec();
+    var user = yield User.findOne({name: name}).exec();
     if(!user){
         this.redirect('pages/signup');
         return next;
     }
-    var isMatch = yield user.comparePassword(password);
+    var isMatch = yield user.comparePassword(password,user.password);
     if(isMatch){
          console.log('password right');
          this.session.user = user;
 
-         this.redirect('pages/');
+         this.redirect('/');
      }else{
          this.redirect('pages/signin');
         console.log('password wrong');
@@ -50,7 +51,7 @@ exports.signin =  function *(next){
 exports.logout =  function *(next){
     delete this.session.user;
     // delete app.locals.user;
-    this.redirect('pages/');
+    this.redirect('/');
 }
 
 //user list

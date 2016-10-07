@@ -4,6 +4,7 @@ var Movie = require('../api/movie')
 //index page
 exports.index = function *(next){
     var categories = yield Movie.findAll();
+    console.log(categories);
     yield this.render('pages/index',{
         title: '首页',
         categories: categories

@@ -16,6 +16,9 @@ exports.detail = function *(next){
           .populate('from','name')
           .populate('reply.from reply.to','name')
           .exec();
+    console.log('movie')
+    console.log(movie)
+    console.log(comments)
 	yield this.render('pages/detail',{
 		title: movie.title + '详情',
 		movie:  movie,
