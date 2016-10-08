@@ -1,10 +1,6 @@
 'use strict'
 
 var Koa = require('koa');
-var util = require('./libs/util');
-var sha1 = require('sha1');
-var path = require('path');
-var config = require('./wx/index');
 
 var fs = require('fs')
 var mongoose = require('mongoose')
@@ -51,8 +47,12 @@ var session = require('koa-session');
 var bodyParser = require('koa-bodyparser');
 var User = mongoose.model('User');
 var views = require('koa-views');
+var moment = require('moment');
 app.use(views(__dirname + '/app/views', {
-  extension: 'jade' 
+  extension: 'jade' ,
+  locals: {
+    moment: moment
+  }
 }))
 app.keys = ['key'];
 app.use(session(app));

@@ -6,7 +6,7 @@ var Comment = require('../app/controllers/comment');
 var Category = require('../app/controllers/category');
 var Game = require('../app/controllers/game');
 var Wechat = require('../app/controllers/wechat');
-
+var koaBody = require('koa-body'); 
 module.exports = function(router){
 
     //Index 
@@ -31,7 +31,7 @@ module.exports = function(router){
     router.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list);
     router.get('/admin/movie/new', User.signinRequired, User.adminRequired, Movie.new);
     router.get('/admin/movie/update/:id', User.signinRequired, User.adminRequired,  Movie.update);
-    // router.post('/admin/movie/save',  User.signinRequired, User.adminRequired, Movie.savePoster,  Movie.save);
+    router.post('/admin/movie/save', User.signinRequired, User.adminRequired,  koaBody({multipart: true}), Movie.savePoster,  Movie.save);
     router.delete('/admin/movie/list',  User.signinRequired, User.adminRequired, Movie.del);
 
 
