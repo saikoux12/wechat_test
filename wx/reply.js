@@ -1,15 +1,9 @@
 'use strict'
 
-var config = require('../config');
-var path = require('path');
-var wx = require('./index');
-var wechatApi = wx.getWechat();
 var Movie = require('../app/api/movie');
-
+var url = 'http://wzzzx.ngrok.cc/wechat/jump/';
 exports.reply = function* (next){   
 	var message = this.weixin;
-	console.log('message-----------------');
-	console.log(message);
 	if(message.MsgType === 'event'){
 		if(message.Event === 'subscribe'){
 			if(message.EventKey){
@@ -28,47 +22,52 @@ exports.reply = function* (next){
 			this.body = '您上报的位置是' + message.Latitude  + '/' + message.Longitude + '-' + message.Precision
 		}
 		else if(message.Event === 'CLICK'){
-			this.body = '您点击了菜单' + message.EventKey;
-		}
-		else if(message.Event === 'SCAN'){
-			console.log('关注后扫二维码' + message.EventKey + '  ' + message.Tickey);
-			this.body = '扫一下';
-		}
-		else if(message.Event === 'VIEW'){
-			this.body = '点击了菜单中的链接' + message.EventKey;
-		}
-		else if(message.Event === 'scancode_push'){
-			console.log(message.ScanCodeInfo.ScanType);
-			console.log(message.ScanCodeInfo.ScanResult);
-			this.body = '点击了菜单中的链接' + message.EventKey;
-		}
-		else if(message.Event === 'scancode_waitmsg'){
-			console.log(message.ScanCodeInfo.ScanType);
-			console.log(message.ScanCodeInfo.ScanResult);
-			this.body = '点击了菜单中的链接' + message.EventKey;
-		}
-		else if(message.Event === 'pic_sysphoto'){
-			console.log(message.SendPicsInfo.PicList);
-			console.log(message.SendPicsInfo.Count);
-			this.body = '点击了菜单中的链接' + message.EventKey;
-		}
-		else if(message.Event === 'pic_photo_or_album'){
-			console.log(message.SendPicsInfo.PicList);
-			console.log(message.SendPicsInfo.Count);
-			this.body = '点击了菜单中的链接' + message.EventKey;
-		}
-		else if(message.Event === 'pic_weixin'){
-			console.log('message');
-			console.log(message);
-			console.log(message.SendLocationInfo.Location_X);
-			console.log(message.SendLocationInfo.Location_Y);
-			console.log(message.SendLocationInfo.Scale);
-			console.log(message.SendLocationInfo.Label);
-			console.log(message.SendLocationInfo.Poiname);
-			this.body = '点击了菜单中的链接' + message.EventKey;
-		}
-		else if(message.Event === 'location_select'){
-			this.body = '点击了菜单中的链接' + message.EventKey;
+			var news = [];
+			if(message.EventKey === 'movie_hot'){
+				let movies = yield Movie.findHotsMovies(-1, 10);
+				movies.forEach(function(movie){
+					news.push({
+						title: movie.title,
+						description: movie.title,
+						picUrl: movie.poster,
+						url: url + movie._id
+					});
+				})
+			}else if(message.EventKey === 'movie_cold'){
+				let movies = yield Movie.findHotsMovies(1, 10);
+				movies.forEach(function(movie){
+					news.push({
+						title: movie.title,
+						description: movie.title,
+						picUrl: movie.poster,
+						url: url + movie._id
+					});
+				})
+			}else if(message.EventKey === 'movie_crime'){
+				let cat = yield Movie.findMoviesByCat('犯罪');
+				cat.movies.forEach(function(movie){
+					news.push({
+						title: movie.title,
+						description: movie.title,
+						picUrl: movie.poster,
+						url: url + movie._id
+					});
+				});
+			}else if(message.EventKey === 'movie_cartoon'){
+				let cat = yield Movie.findMoviesByCat('动画');
+				cat.movies.forEach(function(movie){
+					news.push({
+						title: movie.title,
+						description: movie.title,
+						picUrl: movie.poster,
+						url: url + movie._id
+					});
+				});
+			}else if(message.EventKey === 'help'){
+				news = 'help';
+			}
+			this.body = news;
+
 		}
 	}
 	else if (message.MsgType === 'text'){
@@ -106,7 +105,7 @@ exports.reply = function* (next){
 		 				title: movie.title,
 		 				description: movie.title,
 		 				picUrl: movie.poster,
-		 				url: 'http://wzzzx.ngrok.cc/wechat/jump/' + movie._id
+		 				url: url + movie._id
 		 			})
 		 		})
 		 	}else{

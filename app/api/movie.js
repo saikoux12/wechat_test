@@ -130,3 +130,23 @@ exports.searchByDouban = function *(q){
 
 	return movies;
 }
+
+exports.findHotsMovies = function *(hot, count){
+	var movies = yield Movie
+          .find({})
+          .sort({'pv': hot})
+          .limit(count)
+          .exec();
+    return movies;
+}
+
+exports.findMoviesByCat = function *(cat){
+	var category = yield Category
+          .findOne({name: cat})
+          .populate({
+          	path: 'movies',
+          	select: 'title poster _id'
+          })
+          .exec();
+    return category;
+}

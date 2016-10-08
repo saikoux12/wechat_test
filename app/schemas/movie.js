@@ -14,6 +14,7 @@ var MovieSchema = new Schema({
 	year: Number,
 	genres: [String],
 	category: {type: ObjectId, ref: 'Category'},
+	pv: {type: Number, default: 0},
 	meta: {
 		createAt:{
 			type: Date,
