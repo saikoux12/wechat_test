@@ -32,7 +32,7 @@ exports.signin =  function *(next){
     var password = _user.password;
     var user = yield User.findOne({name: name}).exec();
     if(!user){
-        this.redirect('pages/signup');
+        this.redirect('/signin');
         return next;
     }
     var isMatch = yield user.comparePassword(password,user.password);
@@ -42,7 +42,7 @@ exports.signin =  function *(next){
 
          this.redirect('/');
      }else{
-         this.redirect('pages/signin');
+         this.redirect('/signin');
         console.log('password wrong');
      }
 }

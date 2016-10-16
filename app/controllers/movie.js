@@ -10,7 +10,7 @@ var _ = require('lodash');
 exports.detail = function *(next){
     var id = this.params.id;
     // yield Moive.update({_id: id}, {$inc: {pv: 1}}).exec();
-    yield Movie.update(_id: id, {$inc: {pv: 1}}).exec();
+    yield Movie.update({_id: id}, {$inc: {pv: 1} }).exec();
     var movie = yield Movie.findOne({_id: id}).exec();
     var comments = yield Comment
           .find({movie: id})

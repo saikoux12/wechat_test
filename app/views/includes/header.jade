@@ -3,6 +3,10 @@
 		.page-header.clearfix
 			h1 #{title}
 			.col-md-4
+				if user && user.role > 10
+					a(href="/" style='text-decoration:none;') 首页 &nbsp;
+					a(href="/admin/movie/list" style='text-decoration:none;') 管理电影 &nbsp;					
+					a(href="/admin/user/list" style='text-decoration:none;') 管理用户
 			.col-md-8
 				form(mehtod="GET",action="/results")
 					.input-group.col-sm-4.pull-right

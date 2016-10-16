@@ -20,13 +20,16 @@ exports.guess = function *(next){
 
 exports.jump = function *(next){
 	var movieId = this.params.id;
-	var redirect = 'http://wzzzx.ngrok.cc/wechat/movie/' + movieId;
+	var redirect = encodeURIComponent('http://wzzzx.ngrok.cc/wechat/movie/' + movieId);
+	console.log(redirect)
 	var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + wx.wechatOptions.wechat.appID + '&redirect_uri=' + redirect + '&response_type=code&scope=snsapi_base&state='+ movieId + '#wechat_redirect';
+	console.log(url)
 	this.redirect(url);
 }
 
 exports.find = function *(next){
 	var code = this.query.code;
+	console.log(code)
 	var openUrl = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + wx.wechatOptions.wechat.appID + '&secret=' + wx.wechatOptions.wechat.appSecret + '&code=' + code + '&grant_type=authorization_code';
 	var response = yield koa_request({
 		url: openUrl
